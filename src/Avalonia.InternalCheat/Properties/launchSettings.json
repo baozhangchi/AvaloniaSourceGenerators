@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Avalonia.InternalCheat": {
+      "commandName": "DebugRoslynComponent",
+      "targetProject": "..\\..\\..\\VSDownloader\\VSDownloader.csproj"
+    }
+  }
+}
