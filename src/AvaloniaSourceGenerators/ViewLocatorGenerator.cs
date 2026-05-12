@@ -5,7 +5,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace Avalonia.InternalCheat;
+namespace AvaloniaSourceGenerators;
 
 [Generator(LanguageNames.CSharp)]
 internal class ViewLocatorGenerator : IIncrementalGenerator

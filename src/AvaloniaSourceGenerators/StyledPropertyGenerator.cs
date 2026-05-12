@@ -4,17 +4,19 @@ using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Diagnostics;
 
-namespace Avalonia.InternalCheat;
+namespace AvaloniaSourceGenerators;
 
 [Generator(LanguageNames.CSharp)]
-internal class ObservablePropertyGenerator : IIncrementalGenerator
+internal class StyledPropertyGenerator : IIncrementalGenerator
 {
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
         var typesProvider = context.SyntaxProvider.CreateSyntaxProvider(
-            static (syntaxNode, _) => syntaxNode is ClassDeclarationSyntax,
+            static (syntaxNode, _) => syntaxNode is ClassDeclarationSyntax
+            {
+                Parent: BaseNamespaceDeclarationSyntax,
+            },
             static (generatorExecutionContext, _) =>
             {
                 var classDeclarationSyntax = (ClassDeclarationSyntax)generatorExecutionContext.Node;
@@ -23,7 +25,7 @@ internal class ObservablePropertyGenerator : IIncrementalGenerator
                 var propertySymbols = classDeclarationSyntax.ChildNodes().OfType<PropertyDeclarationSyntax>()
                     .Select(x => generatorExecutionContext.SemanticModel.GetDeclaredSymbol(x)!)
                     .Where(x => x.GetAttributes().Any(a =>
-                        a.AttributeClass!.ToDisplayString() == typeof(ObservablePropertyAttribute).FullName))
+                        a.AttributeClass!.ToDisplayString() == typeof(StyledPropertyAttribute).FullName))
                     .ToList();
                 return
                 (
@@ -62,30 +64,17 @@ internal class ObservablePropertyGenerator : IIncrementalGenerator
         foreach (var propertySymbol in propertySymbols)
         {
             builder.AppendLine(
+                $"public static readonly global::Avalonia.StyledProperty<{propertySymbol.Type.ToDisplayString()}> {propertySymbol.Name}Property = global::Avalonia.AvaloniaProperty.Register<{declaredSymbol.ToDisplayString()}, {propertySymbol.Type.ToDisplayString()}>(nameof({propertySymbol.Name}));");
+            builder.AppendLine(
                 $"{propertySymbol.DeclaredAccessibility.ToString().ToLower()} partial {propertySymbol.Type.ToDisplayString()} {propertySymbol.Name}");
             builder.AppendLine("{");
-            builder.AppendLine("get => field;");
-            builder.AppendLine(
-                $@"set{{
-var oldValue=field;
-global::ReactiveUI.IReactiveObjectExtensions.RaiseAndSetIfChanged(this,ref field,value);
-if (!global::System.Collections.Generic.EqualityComparer<{propertySymbol.Type.ToDisplayString()}>.Default.Equals(oldValue, value)){{
-On{propertySymbol.Name}Changed();
-On{propertySymbol.Name}Changed(value);
-On{propertySymbol.Name}Changed(oldValue,value);
-}}
-}}");
+            builder.AppendLine($"get => GetValue({propertySymbol.Name}Property);");
+            builder.AppendLine($"set => SetValue({propertySymbol.Name}Property, value);");
             builder.AppendLine("}");
-            builder.AppendLine(
-                $"partial void On{propertySymbol.Name}Changed();");
-            builder.AppendLine(
-                $"partial void On{propertySymbol.Name}Changed({propertySymbol.Type.ToDisplayString()} value);");
-            builder.AppendLine(
-                $"partial void On{propertySymbol.Name}Changed({propertySymbol.Type.ToDisplayString()} oldValue,{propertySymbol.Type.ToDisplayString()} newValue);");
         }
 
         builder.AppendLine("}");
-        productionContext.AddSource($"{declaredSymbol.ToDisplayString()}.ObservableProperty.g.cs",
+        productionContext.AddSource($"{declaredSymbol.ToDisplayString()}.StyledProperty.g.cs",
             SyntaxFactory.ParseMemberDeclaration(builder.ToString())!.As<ClassDeclarationSyntax>()!.Output(ns, nullable));
     }
 }

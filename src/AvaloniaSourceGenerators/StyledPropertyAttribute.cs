@@ -1,6 +1,6 @@
 using System;
 
-namespace Avalonia.InternalCheat;
+namespace AvaloniaSourceGenerators;
 
 [AttributeUsage(AttributeTargets.Property)]
 public class StyledPropertyAttribute : Attribute

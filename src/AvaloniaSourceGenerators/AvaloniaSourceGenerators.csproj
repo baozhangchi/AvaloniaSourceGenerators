@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
+		<IsRoslynComponent>true</IsRoslynComponent>
+		<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+		<Title>$(AssemblyName)</Title>
+		<Authors>Zhangchi Bao</Authors>
+		<PackageProjectUrl>https://github.com/baozhangchi/AvaloniaSourceGenerators.git</PackageProjectUrl>
+		<Description>Avalonia项目代码生成器 </Description>
+		<PackageTags>Avalonia;ReactiveUI.Avalonia</PackageTags>
+		<AssemblyVersion>$(Version)</AssemblyVersion>
+		<FileVersion>$(Version)</FileVersion>
+		<Version>1.0.1</Version>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Remove="bin\Debug\netstandard2.0\AvaloniaSourceGenerators.dll" />
+	</ItemGroup>
+
+	<!-- 👇 核心：自动把 DLL 打包到 analyzers 目录，实现自动 Analyzer -->
+	<ItemGroup>
+		<None Include="$(OutputPath)$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+	</ItemGroup>
+
+</Project>
