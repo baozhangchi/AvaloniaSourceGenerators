@@ -13,7 +13,7 @@
 		<PackageTags>Avalonia;ReactiveUI.Avalonia</PackageTags>
 		<AssemblyVersion>$(Version)</AssemblyVersion>
 		<FileVersion>$(Version)</FileVersion>
-		<Version>1.0.1</Version>
+		<Version>1.0.2</Version>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -21,12 +21,27 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Remove="bin\Debug\netstandard2.0\AvaloniaSourceGenerators.dll" />
+		<None Remove="bin\Debug\netstandard2.0\AvaloniaSourceGenerators.dll" />
 	</ItemGroup>
 
-	<!-- 👇 核心：自动把 DLL 打包到 analyzers 目录，实现自动 Analyzer -->
+	<!-- ========================================== -->
+	<!-- 👇 1. 代码生成器 DLL → 作为 Analyzer（自动执行） -->
+	<!-- ========================================== -->
 	<ItemGroup>
-		<None Include="$(OutputPath)$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+		<None Include="$(OutputPath)$(AssemblyName).dll"
+		      Pack="true"
+		      PackagePath="analyzers/dotnet/cs"
+		      Visible="false" />
+	</ItemGroup>
+
+	<!-- ========================================== -->
+	<!-- 👇 2. 同一 DLL 同时 → 作为公共类库（可被调用） -->
+	<!-- ========================================== -->
+	<ItemGroup>
+		<None Include="$(OutputPath)$(AssemblyName).dll"
+		      Pack="true"
+		      PackagePath="lib/netstandard2.0"
+		      Visible="false" />
 	</ItemGroup>
 
 </Project>
