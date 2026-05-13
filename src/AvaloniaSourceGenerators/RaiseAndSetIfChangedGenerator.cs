@@ -8,7 +8,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 namespace AvaloniaSourceGenerators;
 
 [Generator(LanguageNames.CSharp)]
-internal class ObservablePropertyGenerator : IIncrementalGenerator
+internal class RaiseAndSetIfChangedGenerator : IIncrementalGenerator
 {
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
@@ -22,7 +22,7 @@ internal class ObservablePropertyGenerator : IIncrementalGenerator
                 var propertySymbols = classDeclarationSyntax.ChildNodes().OfType<PropertyDeclarationSyntax>()
                     .Select(x => generatorExecutionContext.SemanticModel.GetDeclaredSymbol(x)!)
                     .Where(x => x.GetAttributes().Any(a =>
-                        a.AttributeClass!.ToDisplayString() == typeof(ObservablePropertyAttribute).FullName))
+                        a.AttributeClass!.ToDisplayString() == typeof(RaiseAndSetIfChangedAttribute).FullName))
                     .ToList();
                 return
                 (

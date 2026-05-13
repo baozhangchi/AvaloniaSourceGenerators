@@ -8,12 +8,15 @@
 		<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
 		<Title>$(AssemblyName)</Title>
 		<Authors>Zhangchi Bao</Authors>
-		<PackageProjectUrl>https://github.com/baozhangchi/AvaloniaSourceGenerators.git</PackageProjectUrl>
+		<PackageProjectUrl>https://github.com/baozhangchi/AvaloniaSourceGenerators</PackageProjectUrl>
 		<Description>Avalonia项目代码生成器 </Description>
 		<PackageTags>Avalonia;ReactiveUI.Avalonia</PackageTags>
 		<AssemblyVersion>$(Version)</AssemblyVersion>
 		<FileVersion>$(Version)</FileVersion>
-		<Version>1.0.2</Version>
+		<Version>1.0.3</Version>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<RepositoryUrl>https://github.com/baozhangchi/AvaloniaSourceGenerators</RepositoryUrl>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -28,20 +31,22 @@
 	<!-- 👇 1. 代码生成器 DLL → 作为 Analyzer（自动执行） -->
 	<!-- ========================================== -->
 	<ItemGroup>
-		<None Include="$(OutputPath)$(AssemblyName).dll"
-		      Pack="true"
-		      PackagePath="analyzers/dotnet/cs"
-		      Visible="false" />
+		<None Include="$(OutputPath)$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
 	</ItemGroup>
 
 	<!-- ========================================== -->
 	<!-- 👇 2. 同一 DLL 同时 → 作为公共类库（可被调用） -->
 	<!-- ========================================== -->
 	<ItemGroup>
-		<None Include="$(OutputPath)$(AssemblyName).dll"
-		      Pack="true"
-		      PackagePath="lib/netstandard2.0"
-		      Visible="false" />
+		<None Include="$(OutputPath)$(AssemblyName).dll" Pack="true" PackagePath="lib/netstandard2.0" Visible="false" />
+		<None Include="..\..\LICENSE" Link="LICENSE">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+		<None Include="..\..\README.md">
+		  <Pack>True</Pack>
+		  <PackagePath>\</PackagePath>
+		</None>
 	</ItemGroup>
 
 </Project>

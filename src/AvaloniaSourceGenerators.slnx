@@ -1,3 +1,8 @@
 <Solution>
+  <Folder Name="/sln/">
+    <File Path="../LICENSE" />
+    <File Path="../README.md" />
+    <File Path="Directory.Packages.props" />
+  </Folder>
   <Project Path="AvaloniaSourceGenerators/AvaloniaSourceGenerators.csproj" />
 </Solution>
