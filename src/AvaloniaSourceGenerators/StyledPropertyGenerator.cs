@@ -56,7 +56,7 @@ internal class StyledPropertyGenerator : IIncrementalGenerator
             return;
         }
 
-        var ns = declaredSymbol.ContainingNamespace.ToString();
+        var ns = declaredSymbol.ContainingNamespace.ToDisplayString();
         var className = declaredSymbol.Name;
         var builder = new StringBuilder();
         builder.AppendLine($"partial class {className}");

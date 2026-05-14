@@ -29,3 +29,4 @@
     ```
     [StyledProperty] public partial bool IsSelected { get; set; }
     ```
+4. 给默认的`ViewLocator`添加`partial`标记并移除原来的`Build`方法，会扫描程序集中所有的`UserControl`和`Window`并自动生成新的`Build`

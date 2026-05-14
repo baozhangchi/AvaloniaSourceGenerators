@@ -39,7 +39,10 @@ internal class RaiseAndSetIfChangedGenerator : IIncrementalGenerator
         if (arg2.Right is CSharpCompilation compilation)
         {
             var nullable = compilation.Options.NullableContextOptions == NullableContextOptions.Enable;
-            GenerateCode(arg1, arg2.Left, nullable);
+            if (compilation.IsReferenced("ReactiveUI.Avalonia"))
+            {
+                GenerateCode(arg1, arg2.Left, nullable);
+            }
         }
     }
 
@@ -53,7 +56,7 @@ internal class RaiseAndSetIfChangedGenerator : IIncrementalGenerator
             return;
         }
 
-        var ns = declaredSymbol.ContainingNamespace.ToString();
+        var ns = declaredSymbol.ContainingNamespace.ToDisplayString();
         var className = declaredSymbol.Name;
         var builder = new StringBuilder();
         builder.AppendLine($"partial class {className}");

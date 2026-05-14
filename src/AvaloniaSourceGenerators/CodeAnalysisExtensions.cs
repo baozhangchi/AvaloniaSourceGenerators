@@ -8,6 +8,23 @@ namespace AvaloniaSourceGenerators;
 
 internal static class CodeAnalysisExtensions
 {
+    extension(CSharpCompilation compilation)
+    {
+        public bool IsReferenced(string assemblyName)
+        {
+            // 遍历项目引用的所有程序集
+            foreach (var assemblySymbol in compilation.SourceModule.ReferencedAssemblySymbols)
+            {
+                if (assemblySymbol.Name == assemblyName)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+    }
+
     extension(INamedTypeSymbol namedTypeSymbol)
     {
         public bool Is(string baseTypeName)

@@ -42,7 +42,10 @@ internal class ReactiveCommandGenerator : IIncrementalGenerator
         if (arg2.Right is CSharpCompilation compilation)
         {
             var nullable = compilation.Options.NullableContextOptions == NullableContextOptions.Enable;
-            GenerateCode(arg1, arg2.Left, nullable);
+            if (compilation.IsReferenced("ReactiveUI.Avalonia"))
+            {
+                GenerateCode(arg1, arg2.Left, nullable);
+            }
         }
     }
 
@@ -59,7 +62,7 @@ internal class ReactiveCommandGenerator : IIncrementalGenerator
         var builder = new StringBuilder();
         try
         {
-            var ns = declaredSymbol.ContainingNamespace.ToString();
+            var ns = declaredSymbol.ContainingNamespace.ToDisplayString();
             var className = declaredSymbol.Name;
             builder.AppendLine($"partial class {className}{{");
             foreach (var methodSymbol in methodSymbols)

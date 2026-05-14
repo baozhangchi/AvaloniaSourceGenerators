@@ -125,7 +125,7 @@ internal class ViewLocatorGenerator : IIncrementalGenerator
 
             sourceProductionContext.AddSource($"{declaredSymbol.Name}_ViewLocator.g.cs",
                 SyntaxFactory.ParseMemberDeclaration(builder.ToString())!.As<ClassDeclarationSyntax>()!.Output(
-                    declaredSymbol.ContainingNamespace.Name, nullable));
+                    declaredSymbol.ContainingNamespace.ToDisplayString(), nullable));
         }
     }
 
